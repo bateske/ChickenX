@@ -4,9 +4,9 @@
 #include <SPI.h>
 #include <Print.h>
 
-#define CS 6
+#define CS 12
 #define DC 4
-#define RST 12
+#define RST 6
 
 #define WIDTH 128
 #define HEIGHT 64
