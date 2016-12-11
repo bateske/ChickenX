@@ -16,15 +16,15 @@
 #include <EEPROM.h>
 
 #include "Collision.h"
-#define OLED_DC 8
-#define OLED_CS 10   // SPI slave-select
-#define OLED_CLK 13  // hardware SPI clock
-#define OLED_MOSI 11   // hardware SPI MOSI
-#define OLED_RESET 7
-#define left 9
-#define up 8
-#define right 5
-#define down 10
+#define OLED_DC 4
+#define OLED_CS 12   // SPI slave-select
+#define OLED_CLK 15  // hardware SPI clock
+#define OLED_MOSI 16   // hardware SPI MOSI
+#define OLED_RESET 6
+#define left A2
+#define up A0
+#define right A1
+#define down A3
 
 Arduboy display;
 Collision collision;
@@ -75,7 +75,7 @@ class Egg{
     if(eggTimer == 0){
       if(isActive == false){      
      isActive  = true; 
-       tone(A2, 1200, 300);
+       tone(5, 1200, 300);
      x = random(minX,maxX);
      x *= 7;
      y = random(minY,maxY) ;
@@ -186,13 +186,13 @@ void checkScore() {
     score += 100;
 
     if (enableSound)
-      tone(A2, 1200, 300);
+      tone(5, 1200, 300);
     delay(200);
     if (enableSound)
-      tone(A2, 200, 200);
+      tone(5, 200, 200);
     delay(100);
     if (enableSound)
-      tone(A2, 1500, 400);
+      tone(5, 1500, 400);
     delay(200);
     chicken.x = chicken.startX;
     chicken.y = chicken.startY;
@@ -212,10 +212,10 @@ void intro()
 
   }
   if (enableSound)
-    tone(A2, 987, 160);
+    tone(5, 987, 160);
   delay(160);
   if (enableSound)
-    tone(A2, 1318, 400);
+    tone(5, 1318, 400);
   delay(2000);
 }
 
@@ -376,7 +376,7 @@ void enterInitials()
     display.drawLine(56 + (index * 8), 28, 56 + (index * 8) + 6, 28, 1);
     delay(150);
 
-    if (!digitalRead(5))
+    if (!digitalRead(8))
     {
       index--;
       if (index < 0)
@@ -385,11 +385,11 @@ void enterInitials()
       } else
       {
         if (enableSound)
-          tone(A2, 1046, 250);
+          tone(5, 1046, 250);
       }
     }
 
-    if (!digitalRead(9))
+    if (!digitalRead(7))
     {
       index++;
       if (index > 2)
@@ -397,15 +397,15 @@ void enterInitials()
         index = 2;
       }  else {
         if (enableSound)
-          tone(A2, 1046, 250);
+          tone(5, 1046, 250);
       }
     }
 
-    if (!digitalRead(8))
+    if (!digitalRead(A0))
     {
       initials[index]++;
       if (enableSound)
-        tone(A2, 523, 250);
+        tone(5, 523, 250);
       // A-Z 0-9 :-? !-/ ' '
       if (initials[index] == '0')
       {
@@ -425,11 +425,11 @@ void enterInitials()
       }
     }
 
-    if (!digitalRead(10))
+    if (!digitalRead(A3))
     {
       initials[index]--;
       if (enableSound)
-        tone(A2, 523, 250);
+        tone(5, 523, 250);
       if (initials[index] == ' ') {
         initials[index] = '?';
       }
@@ -444,16 +444,16 @@ void enterInitials()
       }
     }
 
-    if (!digitalRead(A0))
+    if (!digitalRead(7))
     {
       if (index < 2)
       {
         index++;
         if (enableSound)
-          tone(A2, 1046, 250);
+          tone(5, 1046, 250);
       } else {
         if (enableSound)
-          tone(A2, 1046, 250);
+          tone(5, 1046, 250);
         return;
       }
     }
@@ -544,7 +544,7 @@ void movePlayer()
     pad = right;
     if (pad != oldpad) {
       if (enableSound)
-        tone(A2, 987, 60);
+        tone(5, 987, 60);
       chicken.x += chicken.hopDistance;
       oldpad = pad;
     }
@@ -557,7 +557,7 @@ void movePlayer()
     pad = left;
     if (pad != oldpad) {
       if (enableSound)
-        tone(A2, 987, 60);
+        tone(5, 987, 60);
       chicken.x -= chicken.hopDistance;
       oldpad = pad;
     }
@@ -567,7 +567,7 @@ void movePlayer()
     pad = up;
     if (pad != oldpad) {
       if (enableSound)
-        tone(A2, 987, 60);
+        tone(5, 987, 60);
       chicken.y -= chicken.hopDistance;
       oldpad = pad;
     }
@@ -578,7 +578,7 @@ void movePlayer()
     pad = down;
     if (pad != oldpad) {
       if (enableSound)
-        tone(A2, 987, 60);
+        tone(5, 987, 60);
       chicken.y += chicken.hopDistance;
       oldpad = pad;
     }
@@ -602,7 +602,7 @@ boolean pollFireButton(int n)
   for (int i = 0; i < n; i++)
   {
     delay(15);
-    pad = !digitalRead(A0);
+    pad = !digitalRead(7);
     if (pad == 1 && oldpad == 0)
     {
       oldpad3 = 1; //Forces pad loop 3 to run once
@@ -650,7 +650,7 @@ boolean titleScreen()
       randomSeed(millis());
 
     }
-    if ( !digitalRead(A1) )
+    if ( !digitalRead(8) )
     {
       pad = 1;
       if (oldpad != pad) {
@@ -683,7 +683,7 @@ boolean titleScreen()
         break;
       }
 
-      if ( !digitalRead(A1) )
+      if ( !digitalRead(8) )
       {
         pad = 1;
         if (enableSound) {
@@ -722,7 +722,7 @@ boolean titleScreen()
         randomSeed(millis());
         break;
       }
-      if ( !digitalRead(A1) )
+      if ( !digitalRead(8) )
       {
         pad = 1;
         if (oldpad != pad) {
@@ -768,10 +768,10 @@ void checkCollision() {
   }
   if (collisionDetected) {
     if (enableSound)
-      tone(A2, 200, 250);
+      tone(5, 200, 250);
     delay(150);
     if (enableSound)
-      tone(A2, 180, 250);
+      tone(5, 180, 250);
     delay(400);
     lives --;
     timer = timerReset;
@@ -788,7 +788,7 @@ void checkCollision() {
       egg.x = 160;
       egg.y = 160;
       score += 300;
-      tone(A2,900,250);
+      tone(5,900,250);
       egg.eggTimer = egg.eggTimerReset;
     }
 }
@@ -797,10 +797,10 @@ void checkTimer() {
   if (timer < 0) {
     gameOver = true;
     if (enableSound)
-      tone(A2, 200, 250);
+      tone(5, 200, 250);
     delay(150);
     if (enableSound)
-      tone(A2, 180, 250);
+      tone(5, 180, 250);
     delay(400);
   }
 }
