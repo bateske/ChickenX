@@ -7,12 +7,15 @@ void Arduboy::start()
 {
   pinMode(DC, OUTPUT);
   pinMode(CS, OUTPUT);
+  pinMode(A2, INPUT_PULLUP);
+  pinMode(A3, INPUT_PULLUP);
+  pinMode(7, INPUT_PULLUP);
   pinMode(8, INPUT_PULLUP);
-  pinMode(9, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
   pinMode(A0, INPUT_PULLUP);
   pinMode(A1, INPUT_PULLUP);
+  pinMode(5, OUTPUT);
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
 
   csport = portOutputRegister(digitalPinToPort(CS));
   cspinmask = digitalPinToBitMask(CS);
@@ -665,12 +668,12 @@ uint8_t Arduboy::getInput()
   // b00lurdab
   uint8_t value = B00000000;
 
-  if (digitalRead(9) == 0) { value = value | B00100000; }  // left
-  if (digitalRead(8) == 0) { value = value | B00010000; }  // up
-  if (digitalRead(5) == 0) { value = value | B00001000; }  // right
-  if (digitalRead(10) == 0) { value = value | B00000100; }  // down
-  if (digitalRead(A0) == 0) { value = value | B00000010; }  // a?
-  if (digitalRead(A1) == 0) { value = value | B00000001; }  // b?
+  if (digitalRead(A2) == 0) { value = value | B00100000; }  // left
+  if (digitalRead(A0) == 0) { value = value | B00010000; }  // up
+  if (digitalRead(A1) == 0) { value = value | B00001000; }  // right
+  if (digitalRead(A3) == 0) { value = value | B00000100; }  // down
+  if (digitalRead(7) == 0) { value = value | B00000010; }  // a?
+  if (digitalRead(8) == 0) { value = value | B00000001; }  // b?
   return value;
 }
 
@@ -693,6 +696,5 @@ boolean Arduboy::collideRectRect(int16_t x1, int16_t y1, int16_t w1, int16_t h1 
             y2     >=  y1+h1  ||
             y2+h2  <=  y1     );
 }
-
 
 
